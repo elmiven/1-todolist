@@ -1,18 +1,20 @@
-import React, { FC } from 'react';
+import React, { KeyboardEvent, ChangeEvent, FC, RefObject, useRef, useState } from 'react';
 import { FilteredValuesType } from './App';
 import TasksList from './Tasklist';
 
+export
 type TodolistPropsType = {
     title: string
     tasks: TaskType[] //or Array<TaskType> (generic)
     changeFilterValue: (filter: FilteredValuesType) => void
-    removeTask: (taskId: number) => void
+    removeTask: (taskId: string) => void
+    addTask: (title: string) => void
 }
 
 
 export
     type TaskType = {
-        id: number,
+        id: string,
         title: string,
         isDone: boolean,
     }
@@ -20,6 +22,33 @@ export
 
 const TodoList: FC<TodolistPropsType> = (props: TodolistPropsType) => {
 
+    const [title, setTitle] = useState<string>("")
+
+    // const addTaskInput: RefObject<HTMLInputElement> = useRef(null)
+    // const addTask = () => {
+    //     if (addTaskInput.current) {
+    //         addTaskInput.current && props.addTask(addTaskInput.current.value)
+    //     }
+    // }
+
+
+const changeLocalTitile = (e: ChangeEvent<HTMLInputElement>) => { setTitle(e.currentTarget.value) }
+
+const addTask = () => {
+        const trimmedTitle = title.trim()
+        if (trimmedTitle) {
+            props.addTask(title)
+        }
+        setTitle("")
+    }
+
+
+
+  const onKeyDownAdTask = (e: KeyboardEvent<HTMLInputElement>) => e.key === "Enter" && addTask()
+
+  const setAllFilterValue = () => props.changeFilterValue("all")
+  const setActiveFilterValue= () => props.changeFilterValue("active")
+  const setCompletedFilterValue = () => props.changeFilterValue("completed")
 
     // const tasksItems: JSX.Element[] | JSX.Element = props.tasks.length
     //     ? props.tasks.map((task: TaskType) => {
@@ -37,10 +66,19 @@ const TodoList: FC<TodolistPropsType> = (props: TodolistPropsType) => {
     return (
         <div className={"todolist"}>
 
+
+
             <h3>{props.title}</h3>
             <div>
-                <input />
-                <button>+</button>
+                {/* <input ref={addTaskInput} />
+                <button onClick={addTask}>+</button> */}
+                <input
+                    onKeyDown={onKeyDownAdTask}
+                    value={title}
+                    onChange={changeLocalTitile} />
+                <button disabled={title.trim().length === 0} onClick={addTask}>+</button>
+                {title.length > 15 && <div style={{ color: "pink" }}>task title too long!</div>}
+
             </div>
 
 
@@ -57,9 +95,9 @@ const TodoList: FC<TodolistPropsType> = (props: TodolistPropsType) => {
 
 
             <div>
-                <button onClick ={ ()=> props.changeFilterValue("all")  } >All</button>
-                <button onClick ={ ()=> props.changeFilterValue("active")  } >Active</button>
-                <button onClick ={ ()=> props.changeFilterValue("completed")  } >Completed</button>
+                <button onClick={setAllFilterValue} >All</button>
+                <button onClick={setActiveFilterValue} >Active</button>
+                <button onClick={setCompletedFilterValue} >Completed</button>
 
             </div>
 
