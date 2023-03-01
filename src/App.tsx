@@ -25,10 +25,13 @@ function App(): JSX.Element {
     ])
 
 
+
+
     const removeTask = (taskId: string) => {
         const updatedTasks = tasks.filter(t => t.id !== taskId)
         setTasks(updatedTasks)
     }
+
 
     const addTask = (title: string) => {
         const newTask: TaskType = {
@@ -37,30 +40,27 @@ function App(): JSX.Element {
             isDone: false
         }
         setTasks([newTask, ...tasks])
+    }
 
+
+    const changeTaskStatus = (taskId: string, newIsDone: boolean) => {
+        setTasks(tasks.map( t => t.id === taskId ? {...t, isDone: newIsDone} : t     ))
 
     }
 
 
 
-
-
+    
 
     const [filter, setFilter] = React.useState<FilteredValuesType>("all") //var fileter, fn setFilter
     //useState fn belongs to react object 
     //scheme of destructurisation 
     //state это хук, переменная за которой следит реакт 
 
-
     const changeFilterValue = (filter: FilteredValuesType) => setFilter(filter)
 
-
-
     const getFilteredTasls = (tasks: Array<TaskType>, filter: FilteredValuesType) => {
-
         //let filteredTasks: Array<TaskType> = []
-
-
         switch (filter) {
             case "active":
                 return tasks.filter(t => t.isDone === false);
@@ -69,9 +69,6 @@ function App(): JSX.Element {
             default:
                 return tasks;
         }
-
-
-
         // if (filter === "all") {
         //     filteredTasks = tasks
         // }
@@ -84,9 +81,7 @@ function App(): JSX.Element {
         //     filteredTasks = tasks.filter(t => t.isDone === true)
         // }
 
-
         // return filteredTasks
-
     }
 
     let filteredTasks: Array<TaskType> = getFilteredTasls(tasks, filter)
@@ -105,7 +100,8 @@ function App(): JSX.Element {
                 changeFilterValue={changeFilterValue}
                 removeTask={removeTask}
                 addTask={addTask}
-            />
+                changeTasksStatus={changeTaskStatus} 
+                filter={filter}            />
 
 
         </div>
