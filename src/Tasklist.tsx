@@ -2,9 +2,10 @@ import React, { ChangeEvent, FC, HTMLAttributes } from 'react';
 import { TaskType } from "./Todolist";
 
 type TasksListPropsType = {
+    todoListsId: string
     tasks: TaskType[]
-    removeTask: (taskId: string) => void
-    changeTasksStatus: (taskId: string, isDone: boolean) => void
+    removeTask: (todoListId: string, taskId: string) => void
+    changeTasksStatus: (todoListId: string, taskId: string, isDone: boolean) => void
 }
 
 const TasksList: FC<TasksListPropsType> = (props): JSX.Element => {
@@ -19,10 +20,10 @@ const TasksList: FC<TasksListPropsType> = (props): JSX.Element => {
                 const taskClasses = ["task"]
                 task.isDone && taskClasses.push("task-done")
 
-                const removeTaskHandler = () => props.removeTask(task.id)
+                const removeTaskHandler = () => props.removeTask(props.todoListsId, task.id)
 
                 const changeTasksStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-                    props.changeTasksStatus(task.id, e.currentTarget.checked)
+                    props.changeTasksStatus(props.todoListsId, task.id, e.currentTarget.checked)
                 }
                 return (
                     <li key={task.id}>

@@ -1,16 +1,29 @@
 import React, { KeyboardEvent, ChangeEvent, FC, RefObject, useRef, useState } from 'react';
-import { FilteredValuesType } from './App';
+import { FilteredValuesType, TasksStateType } from './App';
 import TasksList from './Tasklist';
 
 export
     type TodolistPropsType = {
+        todoListId: string
         title: string
-        filter: FilteredValuesType;
-        tasks: TaskType[] //or Array<TaskType> (generic)
-        changeFilterValue: (filter: FilteredValuesType) => void
-        removeTask: (taskId: string) => void
-        addTask: (title: string) => void
-        changeTasksStatus: (taskId: any, isDone: boolean) => void
+        tasks: Array<TaskType>
+        filter: FilteredValuesType
+
+        removeTask: (todoListId: string, taskId: string) => void
+        addTask: (todoListId: string, title: string) => void
+
+        changeTasksStatus: (todoListId: string, taskId: any, isDone: boolean) => void
+
+        changeFilterValue: (todoListId: string, filter: FilteredValuesType,) => void
+        removeTodoList: (todoListid: string) => void
+
+        // title: string
+        // filter: FilteredValuesType;
+        // tasks: TaskType[] //or Array<TaskType> (generic)
+        // changeFilterValue: (filter: FilteredValuesType) => void
+        // removeTask: (taskId: string) => void
+        // addTask: (title: string) => void
+        // changeTasksStatus: (taskId: any, isDone: boolean) => void
     }
 
 
@@ -62,7 +75,7 @@ const TodoList: FC<TodolistPropsType> = (props: TodolistPropsType) => {
     const addTask = () => {
         const trimmedTitle = title.trim()
         if (trimmedTitle && title.length <= maxLengthUserMessage) {
-            props.addTask(trimmedTitle)
+            props.addTask(props.todoListId, trimmedTitle)
         } else {
             setTitle("")
             setError(true)
@@ -78,7 +91,7 @@ const TodoList: FC<TodolistPropsType> = (props: TodolistPropsType) => {
 
     //fn that returns another function (closure)
     const handlerCreator = (filter: FilteredValuesType) => {
-        return () => props.changeFilterValue(filter)
+        return () => props.changeFilterValue(props.todoListId, filter)
     }
 
     // const setAllFilterValue = handlerCreator("all")
@@ -101,13 +114,19 @@ const TodoList: FC<TodolistPropsType> = (props: TodolistPropsType) => {
     //     })р
     //     : <span>your task list is empty</span>
 
+    const removeTodoListhandler = () => {
+        props.removeTodoList(props.todoListId)
+    }
 
     return (
         <div className={"todolist"}>
 
 
 
-            <h3>{props.title}</h3>
+            <h3>
+                {props.title}
+                <button onClick={removeTodoListhandler}>x</button>
+            </h3>
             <div>
                 {/* <input ref={addTaskInput} />
                 <button onClick={addTask}>+</button> */}
@@ -141,6 +160,7 @@ const TodoList: FC<TodolistPropsType> = (props: TodolistPropsType) => {
                 </ul> */}
 
             <TasksList
+                todoListsId={props.todoListId}
                 tasks={props.tasks}
                 removeTask={props.removeTask}
                 changeTasksStatus={props.changeTasksStatus}
