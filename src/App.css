@@ -10,10 +10,15 @@
 
 
 .todolist {
-  border: 2px solid green; 
-  border-radius: 5px; 
+  height: max-content;
+  border: 1px solid aliceblue; 
+  /* border-radius: 5px;  */
   padding: 20px;
-
+  background-color: linear-gradient(red, orange);
+  background: linear-gradient(33deg, #F0EFF0, #FAF8F9);
+  /* background-image: linear-gradient (white, #fceabb, #f8b500); */
+ 
+  box-shadow: 0 5px 10px #0002;
 
 }
 

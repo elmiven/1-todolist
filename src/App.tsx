@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { v1 } from 'uuid';
+import AddItemForm from './AddItemForm';
 import './App.css';
 import TodoList, { TaskType } from './Todolist';
 
@@ -14,8 +15,8 @@ type TodoListStateType = Array<TodoListType>
 export type FilteredValuesType = "all" | "active" | "completed"
 
 
-export type TasksStateType = { 
-[todoListId: string]: Array<TaskType> 
+export type TasksStateType = {
+    [todoListId: string]: Array<TaskType>
 }
 
 
@@ -112,7 +113,7 @@ function App(): JSX.Element {
         copyTasks[todoListId] = updatedTasks
         setTasks(copyTasks)
 
-        // another way
+        // another way in one chaining line 
         // setTasks({...tasks, 
         //     [todoListId]: tasks[todoListId]
         //     .map(t => t.id === taskId ? {...t, isDone: newIsDone} : t)})
@@ -121,6 +122,22 @@ function App(): JSX.Element {
         // setTasks(tasks.map(t => t.id === taskId ? { ...t, isDone: newIsDone } : t))
 
     }
+
+    const changeTaskTitle = (todoListId: string, taskId: string, newTitle: string) => {
+        const tasksForUpdate = tasks[todoListId]
+        const updatedTasks = tasksForUpdate.map(t => t.id === taskId ? { ...t, title: newTitle } : t)
+        const copyTasks = { ...tasks }
+        copyTasks[todoListId] = updatedTasks
+        setTasks(copyTasks)
+
+        // another way in one chaining line 
+        // setTasks({...tasks, 
+        //     [todoListId]: tasks[todoListId]
+        //     .map(t => t.id === taskId ? {...t, title: newTitle} : t)})
+
+
+    }
+
 
 
 
@@ -138,7 +155,12 @@ function App(): JSX.Element {
     }
 
 
-    const getFilteredTasks = (tasks: Array<TaskType>, filter: FilteredValuesType):Array<TaskType> => {
+    const changeTodolistTitle = (todoListId: string, title: string) => {
+        setTodoLists(todoLists.map(tl => tl.id === todoListId ? { ...tl, title } : tl))
+    }
+
+
+    const getFilteredTasks = (tasks: Array<TaskType>, filter: FilteredValuesType): Array<TaskType> => {
         //let filteredTasks: Array<TaskType> = []
         switch (filter) {
             case "active":
@@ -177,6 +199,18 @@ function App(): JSX.Element {
     }
 
 
+    const addTodoList = (title: string) => {
+        const newTodolistID = v1()
+        const newTodolist: TodoListType =
+            { id: newTodolistID, title, filter: "all" }
+        setTodoLists([newTodolist, ...todoLists])
+
+        // we need to add the empty entity for related associative array
+        setTasks({ ...tasks, [newTodolistID]: [] })
+    }
+
+
+
     //UI:
     const todoListsComponent = todoLists.map(tl => {
         const filteredTasks = getFilteredTasks(tasks[tl.id], tl.filter)
@@ -192,10 +226,13 @@ function App(): JSX.Element {
                 removeTask={removeTask}
                 addTask={addTask}
 
+                changeTaskTitle={changeTaskTitle}
                 changeTasksStatus={changeTaskStatus}
+
 
                 changeFilterValue={changeFilterValue}
                 removeTodoList={removeTodoList}
+                changeTodolistTitle={changeTodolistTitle}
             />
         )
     })
@@ -203,8 +240,8 @@ function App(): JSX.Element {
 
     return (
         <div className="App">
+            <AddItemForm maxLengthUserMessage={15} addNewItem={addTodoList} />
             {todoListsComponent}
-
 
         </div>
     );

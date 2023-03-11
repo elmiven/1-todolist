@@ -1,4 +1,5 @@
 import React, { ChangeEvent, FC, HTMLAttributes } from 'react';
+import EditableSpan from './EditableSpan ';
 import { TaskType } from "./Todolist";
 
 type TasksListPropsType = {
@@ -6,9 +7,13 @@ type TasksListPropsType = {
     tasks: TaskType[]
     removeTask: (todoListId: string, taskId: string) => void
     changeTasksStatus: (todoListId: string, taskId: string, isDone: boolean) => void
+    changeTaskTitle: (TodolistId: string, taskId: string, newTitle: string) => void
+
 }
 
 const TasksList: FC<TasksListPropsType> = (props): JSX.Element => {
+
+
 
 
 
@@ -25,6 +30,14 @@ const TasksList: FC<TasksListPropsType> = (props): JSX.Element => {
                 const changeTasksStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
                     props.changeTasksStatus(props.todoListsId, task.id, e.currentTarget.checked)
                 }
+
+
+                const changeTaskTitleHandler = (title: string) => {
+                    props.changeTaskTitle(props.todoListsId, task.id, title)
+
+                }
+
+
                 return (
                     <li key={task.id}>
                         <input
@@ -34,8 +47,8 @@ const TasksList: FC<TasksListPropsType> = (props): JSX.Element => {
                         />
 
                         {/* <span className={`task ${task.isDone ? "task-done" : ""}`}>{task.title}</span> */}
-                        <span className={taskClasses.join(" ")}>{task.title}</span>
-
+                        {/* <span className={taskClasses.join(" ")}>{task.title}</span> */}
+                        <EditableSpan title={task.title} changeTitle={changeTaskTitleHandler} spanClasses={`task ${task.isDone ? "task-done" : ""}`} />
                         <button onClick={removeTaskHandler}>x</button>
                     </li>
                 )
