@@ -1,17 +1,21 @@
 .App {
-  padding: 30px;
-  display: flex;
+  /* padding: 30px;
+  display: flex; */
 }
 
 .App > div {
-  margin-right: 50px;
+  /* margin-right: 50px; */
 }
 
 
 
 .todolist {
+  margin-right: 50px;
+    padding: 30px;
+  display: inline-block;
   height: max-content;
-  border: 1px solid aliceblue; 
+  width: max-content;
+    border: 1px solid aliceblue; 
   /* border-radius: 5px;  */
   padding: 20px;
   background-color: linear-gradient(red, orange);
@@ -55,8 +59,8 @@
 .filter-btn-container {
   display: flex;
   flexDirection: row;
-  justify-Content: space-between
-
+  justify-Content: space-between;
+gap: 5px;
 }
 
 

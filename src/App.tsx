@@ -1,7 +1,11 @@
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
 import React, { useState } from 'react';
 import { v1 } from 'uuid';
 import AddItemForm from './AddItemForm';
 import './App.css';
+import PrimarySearchAppBar from './ButtonAppBar';
 import TodoList, { TaskType } from './Todolist';
 
 type TodoListType = {
@@ -216,6 +220,8 @@ function App(): JSX.Element {
         const filteredTasks = getFilteredTasks(tasks[tl.id], tl.filter)
 
         return (
+            <Grid item>
+                {/* <Paper style={{padding: "10px"}} elevation={0} > */}
             <TodoList
                 key={tl.id}
                 todoListId={tl.id}
@@ -234,15 +240,23 @@ function App(): JSX.Element {
                 removeTodoList={removeTodoList}
                 changeTodolistTitle={changeTodolistTitle}
             />
+            {/* </Paper> */}
+            </Grid>
         )
     })
 
 
     return (
         <div className="App">
-            <AddItemForm maxLengthUserMessage={15} addNewItem={addTodoList} />
-            {todoListsComponent}
-
+            <PrimarySearchAppBar />
+            <Container>
+                <Grid container style={{ padding: "30px" }}>
+                    <AddItemForm maxLengthUserMessage={15} addNewItem={addTodoList} />
+                </Grid>
+                <Grid container spacing="25">
+                    {todoListsComponent}
+                </Grid>
+            </Container>
         </div>
     );
 }

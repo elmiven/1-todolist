@@ -3,6 +3,9 @@ import AddItemForm from './AddItemForm';
 import { FilteredValuesType, TasksStateType } from './App';
 import EditableSpan from './EditableSpan ';
 import TasksList from './Tasklist';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 
 export
     type TodolistPropsType = {
@@ -45,7 +48,7 @@ const TodoList: FC<TodolistPropsType> = (props: TodolistPropsType) => {
 
 
     const maxLengthUserMessage = 15
-    
+
 
 
 
@@ -59,7 +62,7 @@ const TodoList: FC<TodolistPropsType> = (props: TodolistPropsType) => {
     // }
 
 
- 
+
 
 
     const addTask = (title: string) => {
@@ -76,7 +79,7 @@ const TodoList: FC<TodolistPropsType> = (props: TodolistPropsType) => {
 
 
 
-    
+
 
 
     //fn that returns another function (closure)
@@ -118,9 +121,14 @@ const TodoList: FC<TodolistPropsType> = (props: TodolistPropsType) => {
             <h3>
                 <EditableSpan title={props.title} changeTitle={ChangeTodolistTitleHandler} />
                 {/*  */}
-                <button onClick={removeTodoListhandler}>x</button>
+                {/* <button onClick={removeTodoListhandler}>x</button>
+                 */}
+                <IconButton
+                    onClick={removeTodoListhandler}>
+                    <DeleteForeverIcon />
+                </IconButton>
             </h3>
-            <AddItemForm maxLengthUserMessage={15} addNewItem={addTask}/>
+            <AddItemForm maxLengthUserMessage={15} addNewItem={addTask} />
 
 
             {/* <ul>
@@ -142,21 +150,31 @@ const TodoList: FC<TodolistPropsType> = (props: TodolistPropsType) => {
 
 
             <div className="filter-btn-container">
-                <button
+                <Button
+                    size="small"
+                    variant="contained"
+                    disableElevation
+                    color={props.filter === "all" ? "secondary" : "primary"}
                     onClick={handlerCreator("all")}
                     className={props.filter === "all" ? "active-filter" : "filter-btn"}>
                     All
-                </button>
-                <button
+                </Button>
+                <Button size="small"
+                    variant="contained"
+                    disableElevation
+                    color={props.filter === "active" ? "secondary" : "primary"}
                     onClick={handlerCreator("active")}
                     className={props.filter === "active" ? "active-filter" : "filter-btn"}>
                     Active
-                </button>
-                <button
+                </Button>
+                <Button size="small"
+                    variant="contained"
+                    disableElevation
+                    color={props.filter === "completed" ? "secondary" : "primary"}
                     onClick={handlerCreator("completed")}
                     className={props.filter === "completed" ? "active-filter" : "filter-btn"}>
                     Completed
-                </button>
+                </Button>
 
             </div>
 

@@ -1,6 +1,14 @@
 import React, { ChangeEvent, FC, HTMLAttributes } from 'react';
 import EditableSpan from './EditableSpan ';
 import { TaskType } from "./Todolist";
+import ClearIcon from '@mui/icons-material/Clear';
+import { pink, red } from '@mui/material/colors';
+import Checkbox from '@mui/material/Checkbox';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+
+
 
 type TasksListPropsType = {
     todoListsId: string
@@ -39,9 +47,27 @@ const TasksList: FC<TasksListPropsType> = (props): JSX.Element => {
 
 
                 return (
-                    <li key={task.id}>
-                        <input
-                            type="checkbox"
+                    <ListItem key={task.id}
+                        disablePadding
+                        divider
+                        secondaryAction={
+                            <IconButton
+                                size="small"
+                                sx={{ padding: 0, margin: 0, color: pink[800],
+                                    '&.Mui-checked': {
+                                      color: red[900],
+                                    }, }}
+                                onClick={removeTaskHandler}>
+                                <ClearIcon />
+                            </IconButton>
+                        }
+
+
+                    >
+                        <Checkbox
+                            sx={{ padding: 0, margin: 0 }}
+                            
+                            // type="checkbox"
                             checked={task.isDone}
                             onChange={changeTasksStatusHandler}
                         />
@@ -49,8 +75,9 @@ const TasksList: FC<TasksListPropsType> = (props): JSX.Element => {
                         {/* <span className={`task ${task.isDone ? "task-done" : ""}`}>{task.title}</span> */}
                         {/* <span className={taskClasses.join(" ")}>{task.title}</span> */}
                         <EditableSpan title={task.title} changeTitle={changeTaskTitleHandler} spanClasses={`task ${task.isDone ? "task-done" : ""}`} />
-                        <button onClick={removeTaskHandler}>x</button>
-                    </li>
+                        {/* <button onClick={removeTaskHandler}>x</button> */}
+
+                    </ListItem>
                 )
             })
 
@@ -58,9 +85,9 @@ const TasksList: FC<TasksListPropsType> = (props): JSX.Element => {
 
 
     return (
-        <ul>
+        <List>
             {tasksItems}
-        </ul>
+        </List>
     );
 };
 
